@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const playerModal = new bootstrap.Modal(document.getElementById('playerModal'));
+    const playerModal = new bootstrap.Modal(document.getElementById('playerModal'), {
+        backdrop: 'static', // Prevent closing on click outside
+        keyboard: false     // Prevent closing with keyboard (Esc key)
+    });
     playerModal.show();
 
     document.getElementById('start-game-btn').addEventListener('click', startNewGame);
@@ -7,14 +10,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function startNewGame() {
     const playerNames = [
-        document.getElementById('player1').value,
-        document.getElementById('player2').value,
-        document.getElementById('player3').value,
-        document.getElementById('player4').value
+        document.getElementById('player1').value.trim(),
+        document.getElementById('player2').value.trim(),
+        document.getElementById('player3').value.trim(),
+        document.getElementById('player4').value.trim()
     ];
 
-    if (playerNames.some(name => name.trim() === '')) {
+    // Check if any name field is empty
+    if (playerNames.some(name => name === '')) {
         alert("Please enter all player names.");
+        return;
+    }
+
+    // Check if there are any duplicate names
+    const uniqueNames = new Set(playerNames);
+    if (uniqueNames.size !== playerNames.length) {
+        alert("Keine gleichen Namen");
         return;
     }
 
@@ -38,7 +49,6 @@ function startNewGame() {
     })
     .catch(error => console.error("Error starting game:", error));
 }
-
 function displayPlayerCards(cards, playerNumber, playerName) {
     document.getElementById(`player${playerNumber}-name`).textContent = `${playerName}'s Cards`;
 
