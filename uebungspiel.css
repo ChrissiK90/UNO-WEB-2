@@ -17,7 +17,7 @@ h1 {
     margin-bottom: 1rem;
 }
 
-button {
+#start-game-btn {
     background-color: #4a90e2;
     color: #fff;
     border: none;
@@ -25,11 +25,24 @@ button {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #357ab8;
+#start-game-btn:hover {
+    transform: scale(1.1);
+}
+
+.rotate {
+    animation: rotateAnimation 0.5s ease;
+}
+
+@keyframes rotateAnimation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .card-image {

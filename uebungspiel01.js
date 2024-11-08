@@ -5,7 +5,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     playerModal.show();
 
-    document.getElementById('start-game-btn').addEventListener('click', startNewGame);
+    const startButton = document.getElementById('start-game-btn');
+    startButton.addEventListener('click', () => {
+        startButton.classList.add('rotate'); // Rotationseffekt hinzufügen
+
+        // Wartezeit für Rotation, bevor das Spiel startet
+        setTimeout(() => {
+            startButton.classList.remove('rotate'); // Klasse entfernen
+            startNewGame(); // Startet das Spiel
+            playerModal.hide(); // Verbirgt das Modal
+        }, 500); // Wartezeit entspricht der Dauer der Rotation (0.5s)
+    });
 });
 
 function startNewGame() {
