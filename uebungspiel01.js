@@ -16,13 +16,11 @@ function startNewGame() {
         document.getElementById('player4').value.trim()
     ];
 
-    // Check if any name field is empty
     if (playerNames.some(name => name === '')) {
         alert("Please enter all player names.");
         return;
     }
 
-    // Check if there are any duplicate names
     const uniqueNames = new Set(playerNames);
     if (uniqueNames.size !== playerNames.length) {
         alert("Keine gleichen Namen");
@@ -31,9 +29,7 @@ function startNewGame() {
 
     fetch('https://nowaunoweb.azurewebsites.net/api/game/start', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(playerNames)
     })
     .then(response => response.json())
@@ -43,24 +39,54 @@ function startNewGame() {
             displayPlayerCards(player.Cards, index + 1, playerNames[index]);
         });
 
-        fetchTopCard(gameId); // Fetch and display the top card
+        fetchTopCard(gameId);
         const playerModal = bootstrap.Modal.getInstance(document.getElementById('playerModal'));
         playerModal.hide();
+        revealCardsSequentially();
     })
     .catch(error => console.error("Error starting game:", error));
 }
+
+function revealCardsSequentially() {
+    const playerSections = document.querySelectorAll(".card-list");
+
+    playerSections.forEach((section, index) => {
+        const cards = section.querySelectorAll(".card-container");
+
+        cards.forEach((card, i) => {
+            // Stelle sicher, dass die Rückseite zuerst sichtbar ist
+            card.classList.remove("flipped");
+
+            // Flip-Animation nach einem Zeitintervall ausführen
+            setTimeout(() => {
+                card.classList.add("flipped");
+            }, (index * cards.length + i) * 200); // Verzögerung pro Karte auf 1000 ms setzen
+        });
+    });
+}
+
 function displayPlayerCards(cards, playerNumber, playerName) {
     document.getElementById(`player${playerNumber}-name`).textContent = `${playerName}'s Cards`;
-
     const cardListElement = document.getElementById(`card-list-player${playerNumber}`);
     cardListElement.innerHTML = '';
 
     cards.forEach(card => {
-        const cardImage = document.createElement('img');
-        cardImage.src = getCardImageUrl(card) || 'https://nowaunoweb.azurewebsites.net/Content/Cards/default.png';
-        cardImage.alt = `${card.Text} card image`;
-        cardImage.classList.add('card-image');
-        cardListElement.appendChild(cardImage);
+        const cardContainer = document.createElement("div");
+        cardContainer.classList.add("card-container");
+
+        // Rückseite der Karte
+        const cardBack = document.createElement("img");
+        cardBack.src = "https://nowaunoweb.azurewebsites.net/Content/back.png";
+        cardBack.classList.add("card-image", "card-back");
+
+        // Vorderseite der Karte
+        const cardFront = document.createElement("img");
+        cardFront.src = getCardImageUrl(card) || "https://nowaunoweb.azurewebsites.net/Content/Cards/default.png";
+        cardFront.classList.add("card-image", "card-front");
+
+        cardContainer.appendChild(cardBack);
+        cardContainer.appendChild(cardFront);
+        cardListElement.appendChild(cardContainer);
     });
 }
 

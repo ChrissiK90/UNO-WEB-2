@@ -7,33 +7,67 @@ body {
     flex-direction: column;
     align-items: center;
     margin: 0;
-    padding: 20px;
+    padding: 2rem;
 }
 
 /* Title styling */
 h1 {
     color: #4a90e2;
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
 }
 
-/* Button styling */
 button {
     background-color: #4a90e2;
     color: #fff;
     border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin: 20px 0;
 }
 
 button:hover {
     background-color: #357ab8;
 }
 
+.card-image {
+    width: 3rem;
+    height: auto;
+    margin: 0.3rem;
+}
+
+.card-container {
+    perspective: 100rem;
+    position: relative;
+    display: inline-block;
+    width: 3rem;
+    height: 4.5rem;
+}
+
+.card-container .card-image {
+    position: absolute;
+    backface-visibility: hidden;
+    transition: transform 0.2s; /* Übergangsdauer auf 1 Sekunde setzen */
+}
+
+
+.card-back {
+    transform: rotateY(0deg);
+}
+
+.card-front {
+    transform: rotateY(180deg);
+}
+
+.card-container.flipped .card-back {
+    transform: rotateY(180deg);
+}
+
+.card-container.flipped .card-front {
+    transform: rotateY(0deg);
+}
 /* Styling for game information */
 p, h2 {
     font-size: 18px;
